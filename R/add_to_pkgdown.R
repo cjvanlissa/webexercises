@@ -6,6 +6,7 @@
 # @param include_dir The directory where you want to put the css and
 #   js files (defaults to "pkgdown")
 #' @return No return value, called for side effects.
+#' @importFrom yaml read_yaml write_yaml
 #' @export
 add_to_pkgdown <- function(pkgdown_dir = "."){
   usethis::with_project(pkgdown_dir, {
@@ -14,6 +15,7 @@ add_to_pkgdown <- function(pkgdown_dir = "."){
     js <- system.file("reports/default/webex.js", package = "webexercises")
     js_lines <- readLines(js)
     js_lines <- js_lines[-grep("</?script>", js_lines)]
+    include_dir <- "pkgdown"
     if(!dir.exists(file.path(include_dir))){
       dir.create(file.path(include_dir))
     }
@@ -64,12 +66,12 @@ add_to_pkgdown <- function(pkgdown_dir = "."){
 
 #' Create a webexercises vignette
 #'
-#' Wraps \link[usethis]{add_vignette} to add a vignette or article to
+#' Wraps \link[usethis]{use_vignette} to add a vignette or article to
 #' `vignettes/` with support for `webexercises`.
 #' @param name Atomic character, vignette name. See
-#' \link[usethis]{add_vignette}.
+#' \link[usethis]{use_vignette}.
 #' @param title Atomic character, vignette title. See
-#' \link[usethis]{add_vignette}.
+#' \link[usethis]{use_vignette}.
 #' @param type Atomic character, one of `c("vignette", "article")`, defaults to
 #' `"vignette"`.
 #' @return Returns `NULL` invisibly, called for its side effects.
