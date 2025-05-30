@@ -96,8 +96,8 @@ use_webex_vignette <- function(name, title = NULL, type = c("vignette", "article
   linz <- readLines(fnam)
   linz[startsWith(linz, "output:")] <- "output: webexercises::webex_vignette"
   linz <- c(linz, "", "```{r eval=knitr::is_html_output(), results='asis', echo=FALSE}",
-            "# This quizz is only shown in HTML output format",
-            "webexercises::quizz(",
+            "# This quiz is only shown in HTML output format",
+            "webexercises::quiz(",
             "\"The answer to this question is true.\" = TRUE,",
             "\"This multiple choice question has three answers.\" =",
             "c(\"Correct\", \"Incorrect\", \"Not sure\"),",

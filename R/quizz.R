@@ -33,7 +33,7 @@
 #'  `"The answer is 4." = 4L`}
 #' }
 #' @examples
-#' quizz(
+#' quiz(
 #' "The answer to this question is true." = TRUE,
 #' "This multiple choice question has three answers." =
 #'  c("Correct", "Incorrect", "Not sure"),
@@ -42,11 +42,11 @@
 #' @seealso
 #'  \code{\link[knitr]{is_latex_output}}
 #'  \code{\link[webexercises]{mcq}}, \code{\link[webexercises]{torf}}, \code{\link[webexercises]{fitb}}
-#' @rdname quizz
+#' @rdname quiz
 #' @export
 #' @importFrom knitr is_html_output
 #' @importFrom webexercises mcq torf fitb
-quizz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_box = TRUE, show_check = TRUE){
+quiz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_box = TRUE, show_check = TRUE){
   if(render_if){
     if(requireNamespace("webexercises", quietly = TRUE)){
       if(show_box | show_check){

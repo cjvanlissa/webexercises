@@ -37,7 +37,7 @@
 #' text file that contains the questions, see examples.
 #' @examples
 #' # Quiz from arguments:
-#' invisible(capture.output(quizz(
+#' invisible(capture.output(quiz(
 #' "The answer to this question is true." = TRUE,
 #' "This multiple choice question has three answers." =
 #'  c("Correct", "Incorrect", "Not sure"),
@@ -53,15 +53,15 @@
 #' "But here, .8 is also fine = c(0.81, .01)",
 #' "Here, answer exactly 4. = 4L")
 #' , quizz_file)
-#' invisible(capture.output(quizz(quizz_file, render_if = TRUE)))
+#' invisible(capture.output(quiz(quiz_file, render_if = TRUE)))
 #' @seealso
 #'  \code{\link[knitr]{is_latex_output}}
 #'  \code{\link[webexercises]{mcq}}, \code{\link[webexercises]{torf}}, \code{\link[webexercises]{fitb}}
-#' @rdname quizz
+#' @rdname quiz
 #' @export
 #' @importFrom knitr is_html_output
 #' @importFrom webexercises mcq torf fitb
-quizz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_box = TRUE, show_check = TRUE){
+quiz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_box = TRUE, show_check = TRUE){
   if(render_if){
     if(requireNamespace("webexercises", quietly = TRUE)){
       dots <- list(...)
