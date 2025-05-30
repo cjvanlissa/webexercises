@@ -92,8 +92,11 @@ quiz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_
         switch(class(q)[1],
                "character" = {
                  opts <- q
-                 names(opts)[1] <- "answer"
-                 webexercises::mcq(sample(opts))
+                 if(any(names(opts) == "answer")){
+                   webexercises::mcq(sample(opts))
+                 } else {
+                   webexercises::fitb(answer = opts, num = FALSE)
+                 }
                },
                "logical" = {
                  webexercises::torf(q)
