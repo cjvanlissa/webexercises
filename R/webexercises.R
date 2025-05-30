@@ -3,8 +3,7 @@
 #' from the arguments captured by `...`, where the type of each question
 #' is determined automatically from the class of the arguments.
 #' @param ... Each argument should be a named vector, see Details.
-#' @param render_if Logical, whether or not to render the output. By default,
-#' this argument uses `knitr::is_html_output()`.
+#' @param render_if Logical, whether or not to render the output.
 #' @param title Atomic character, default: 'Quiz'
 #' @param show_box Logical, whether or not to draw a box around the quiz.
 #' Default: `TRUE`
@@ -37,13 +36,16 @@
 #' text file that contains the questions, see examples.
 #' @examples
 #' # Quiz from arguments:
-#' invisible(capture.output(quiz(
-#' "The answer to this question is true." = TRUE,
-#' "This multiple choice question has three answers." =
-#'  c("Correct", "Incorrect", "Not sure"),
-#' "Provide an exact floating point answer of 0.81" = 0.81,
-#' render_if = TRUE
-#' )))
+#' invisible(capture.output(
+quiz(
+"The answer to this question is true." = TRUE,
+"This multiple choice question has three answers." =
+ c("Correct", "Incorrect", "Not sure"),
+"Provide an exact floating point answer of 0.81" = 0.81,
+render_if = TRUE,
+output_type = "latex"
+)
+#' ))
 #' # From a file:
 #' quizz_file <- tempfile()
 #' writeLines(
@@ -59,69 +61,158 @@
 #'  \code{\link[webexercises]{mcq}}, \code{\link[webexercises]{torf}}, \code{\link[webexercises]{fitb}}
 #' @rdname quiz
 #' @export
-#' @importFrom knitr is_html_output
+#' @importFrom knitr is_html_output is_latex_output
 #' @importFrom webexercises mcq torf fitb
-quiz <- function(..., render_if = knitr::is_html_output(), title = "Quiz", show_box = TRUE, show_check = TRUE){
-  if(render_if){
-    if(requireNamespace("webexercises", quietly = TRUE)){
-      dots <- list(...)
-      # Check if a file is provided instead of multiple questions
-      if(length(dots) == 1){
-        if(file.exists(dots[[1]])){
-          txt <- readLines(dots[[1]])
-          questionz <- lapply(txt, function(q){
-            spl <- regexpr("=", q)
-            trimws(substring(q, c(1, spl+1), c(spl-1, nchar(q))))
-            })
-          dots <- lapply(questionz, function(q){
-            eval(parse(text = q[2]))
-            })
-          names(dots) <- trimws(sapply(questionz, `[`, 1))
-        }
-      }
-      # Now, prepare the HTML code
-      if(show_box | show_check){
-        classes <- paste0(' class = "',
-                          trimws(paste0(c(c("", "webex-check")[show_check+1L],
-                                               c("", "webex-box")[show_box+1L]), collapse = " ")), '"')
-      }
-      intro <- paste0('<div class="webex-check webex-box">\n<span>\n<p style="margin-top:1em; text-align:center">\n<b>', title, '</b></p>\n<p style="margin-left:1em;">\n')
-      outro <- '\n</p>\n</span>\n</div>'
+quiz <- function(..., render_if = TRUE, title = "Quiz", show_box = TRUE, show_check = TRUE, output_type = c("dynamic", "latex", "html")){
 
-      questions <- sapply(dots, function(q){
-        switch(class(q)[1],
-               "character" = {
-                 opts <- q
-                 if(any(names(opts) == "answer")){
-                   webexercises::mcq(sample(opts))
-                 } else {
-                   webexercises::fitb(answer = opts, num = FALSE)
-                 }
-               },
-               "logical" = {
-                 webexercises::torf(q)
-               },
-               "numeric" = {
-
-                 if(length(q) == 1){
-                   webexercises::fitb(answer = q)
-                 } else {
-                   webexercises::fitb(answer = q[1], tol = q[2])
-                 }
-
-               },
-               "integer" = {
-                 webexercises::fitb(answer = q[1], tol = 0)
-               })})
-
-      txt <- paste0(
-        intro,
-        paste(paste(names(dots), questions), collapse = "\n\n"),
-        outro
-      )
-    } else {
-      txt = ""
+# Parse input -------------------------------------------------------------
+  if(output_type == "dynamic"){
+    if(knitr::is_html_output()){
+      output_type <- "html"
     }
-    cat(txt)
+    if(knitr::is_latex_output()){
+      output_type <- "latex"
+    }
+    if(!output_type %in% c("html", "latex")){
+      return("")
+    }
+  }
+  if (isTRUE(output_type == "html" &
+             !requireNamespace("webexercises", quietly = TRUE))) {
+    return("")
+  }
+  if (render_if) {
+    dots <- list(...)
+    # Check if a file is provided instead of multiple questions
+    if (length(dots) == 1) {
+      if (file.exists(dots[[1]])) {
+        txt <- readLines(dots[[1]])
+        questionz <- lapply(txt, function(q) {
+          spl <- regexpr("=", q)
+          trimws(substring(q, c(1, spl + 1), c(spl - 1, nchar(q))))
+        })
+        dots <- lapply(questionz, function(q) {
+          eval(parse(text = q[2]))
+        })
+        names(dots) <- trimws(sapply(questionz, `[`, 1))
+      }
+    }
+
+# In case of HTML output --------------------------------------------------
+
+    if (output_type == "html") {
+      if (requireNamespace("webexercises", quietly = TRUE)) {
+        # Now, prepare the HTML code
+        txt <- tryCatch({
+        if (show_box | show_check) {
+          classes <- paste0(' class = "', trimws(paste0(c(
+            c("", "webex-check")[show_check + 1L], c("", "webex-box")[show_box + 1L]
+          ), collapse = " ")), '"')
+        }
+        intro <- paste0(
+          '<div class="webex-check webex-box">\n<span>\n<p style="margin-top:1em; text-align:center">\n<b>',
+          title,
+          '</b></p>\n<p style="margin-left:1em;">\n'
+        )
+        outro <- '\n</p>\n</span>\n</div>'
+
+        questions <- sapply(dots, function(q) {
+          switch(
+            class(q)[1],
+            "character" = {
+              opts <- q
+              if (any(names(opts) == "answer")) {
+                webexercises::mcq(sample(opts))
+              } else {
+                webexercises::fitb(answer = opts, num = FALSE)
+              }
+            },
+            "logical" = {
+              webexercises::torf(q)
+            },
+            "numeric" = {
+              if (length(q) == 1) {
+                webexercises::fitb(answer = q)
+              } else {
+                webexercises::fitb(answer = q[1], tol = q[2])
+              }
+
+            },
+            "integer" = {
+              webexercises::fitb(answer = q[1], tol = 0)
+            }
+          )
+        })
+
+        paste0(intro, paste(paste(names(dots), questions), collapse = "\n\n"), outro)
+      }, error = function(e){ "" })
+      cat(txt, sep = "\n")
+      }
+    }
+
+
+# In case of PDF output ---------------------------------------------------
+
+    if (output_type == "latex") {
+      txt <- tryCatch({
+
+        questions <- unlist(lapply(seq_along(dots), function(i) {
+          n <- names(dots)[i]
+          q <- dots[[n]]
+          c(paste0("\\textbf{ Q", i, ": ", n, "}", collapse = ""), "",
+            tryCatch({
+              switch(class(q)[1],
+              "character" = {
+                if (any(names(q) == "answer")) {
+                  c("\\begin{enumerate}",
+                    "\\def\\labelenumi{\\Alph{enumi}.}",
+                    "\\tightlist",
+                    as.character(t(expand.grid("\\item", paste0("  ", sample(q)), stringsAsFactors = FALSE)))
+                    , "\\end{enumerate}")
+                } else {
+                  stop()
+                }
+              },
+              "logical" = {
+                c("\\begin{enumerate}", "\\tightlist", "\\item[$\\square$]", "  True", "\\item[$\\square$]",
+                  "  False", "\\end{enumerate}")
+              },
+              "\\hspace{\\parindent}\\ignorespaces\\ldots{}"
+              )}, error = function(e){ "\\hspace{\\parindent}\\ignorespaces\\ldots{}"}),
+            "")
+        }))
+
+        ansrs <- unname(as.character(dots))
+        is_mc <- !is.na(sapply(dots, `[`, "answer"))
+        if(any(is_mc)){
+          ansrs[which(is_mc)] <- sapply(dots[which(is_mc)], `[`, "answer")
+        }
+        ansrs <- c("\\begin{itemize}", "\\tightlist",
+                   paste0("\\item[Q", seq_along(ansrs), "]  ", ansrs),
+                   "\\end{itemize}")
+        if(show_box){
+          questions <- c(paste0("\\begin{awesomeblock}[lightgray][][\\textbf{", title, "}]{5pt}{\\faCogs}{violet}"),
+                         "\\",
+                         questions,
+                         "",
+                         "\\end{awesomeblock}")
+          ansrs <- c("\\begin{awesomeblock}[lightgray][][\\textbf{Answers}]{5pt}{\\faLightbulb}{teal}",
+                     "\\",
+                     ansrs,
+                     "",
+                     "\\end{awesomeblock}")
+        } else {
+          questions <- c(paste0("\\textbf{", title, "}"),
+                         "\\",
+                         questions)
+
+          ansrs <- c("\\textbf{Answers}",
+                     "\\",
+                     ansrs)
+        }
+        c(questions, "\\newpage", ansrs)
+      }, error = function(e){ "" })
+      knitr::raw_latex(txt)
+    }
   }
 }
