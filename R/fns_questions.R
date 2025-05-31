@@ -115,7 +115,7 @@ mcq <- function(opts) {
 
   # pdf / other format
   pdf_opts <- sprintf("* (%s) %s  ", LETTERS[seq_along(opts)], opts)
-  pdf <- paste0("\n\n", paste(pdf_opts, collapse = "\n"), "\n\n")
+  pdf <- paste0("^[", opts["answer"], "]\n\n", paste(pdf_opts, collapse = "\n"), "\n\n")
 
   # check type of knitting
   out_fmt <- knitr::opts_knit$get("out.format")
@@ -143,10 +143,7 @@ mcq <- function(opts) {
 #' @export
 torf <- function(answer) {
   opts <- c("TRUE", "FALSE")
-  if (answer)
-    names(opts) <- c("answer", "")
-  else
-    names(opts) <- c("", "answer")
+  names(opts)[2L-answer] <- "answer"
 
   # check type of knitting
   out_fmt <- knitr::opts_knit$get("out.format")
@@ -201,7 +198,7 @@ longmcq <- function(opts) {
 
   # pdf / other format
   pdf_opts <- sprintf("* (%s) %s  ", LETTERS[seq_along(opts2)], opts2)
-  pdf <- paste0("\n\n", paste(pdf_opts, collapse = "\n"), "\n\n")
+  pdf <- paste0("^[", opts["answer"], "]\n\n", paste(pdf_opts, collapse = "\n"), "\n\n")
 
   # check type of knitting
   out_fmt <- knitr::opts_knit$get("out.format")
