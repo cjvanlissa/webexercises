@@ -169,7 +169,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
         ansrs[which(is_mc)] <- sapply(dots[which(is_mc)], `[`, "answer")
       }
       ansrs <- c("\\begin{itemize}", "\\tightlist",
-                 paste0("\\item[Q", seq_along(ansrs), "]  ", ansrs),
+                 paste0("\\item[Q", seq_along(ansrs), ":]  ", ansrs),
                  "\\end{itemize}")
       if(show_box){
         txt <- c(paste0("\\begin{tcolorbox}[breakable, enhanced jigsaw,colback=blue!5!white,colframe=blue!75!black,rounded corners, parbox=false,title=", title, "]"),

@@ -58,7 +58,6 @@ add_latex_support <- function(filename){
       yml[["output"]][["pdf_document"]] <- list(extra_dependencies = list(tcolorbox = "most"))
     } else {
       if(!isTRUE("tcolorbox" %in% names(unlist(yml[["output"]][["pdf_document"]][["extra_dependencies"]])))){
-
         yml[["output"]][["pdf_document"]][["extra_dependencies"]] <- c(yml[["output"]][["pdf_document"]][["extra_dependencies"]], list(tcolorbox = "most"))
       }
     }
@@ -119,7 +118,7 @@ add_html_support <- function(filename){
       if(!isTRUE(any(grepl("rmd_webex_support", lnz, fixed = TRUE)))){
         lnz <- c(lnz[1:delim_lnz[2]],
                  "",
-                 "```{r, echo = FALSE}",
+                 "```{r, echo = FALSE, eval = knitr::is_html_output()}",
                  "webexercises::rmd_webex_support()",
                  "```",
                  "",
