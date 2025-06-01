@@ -29,9 +29,7 @@ add_latex_support <- function(filename){
 
   if(endsWith(tolower(filename), ".rmd")){
     # Add to the YAML frontmatter ---------------------------------------------
-    # if(!isTRUE("preamble.tex" %in% yml[["output"]][["pdf_document"]][["includes"]][["in_header"]])){
-    #   yml[["output"]][["pdf_document"]][["includes"]][["in_header"]] <- c(yml[["output"]][["pdf_document"]][["includes"]][["in_header"]], "preamble.tex")
-    # }
+
     if(!isTRUE("tcolorbox" %in% unlist(yml[["output"]][["pdf_document"]][["extra_dependencies"]]))){
 
       extra_dependencies =
@@ -39,31 +37,6 @@ add_latex_support <- function(filename){
       yml[["output"]][["pdf_document"]][["extra_dependencies"]] <- c(yml[["output"]][["pdf_document"]][["extra_dependencies"]], list(tcolorbox = "most"))
     }
   }
-    # Write preamble.tex ------------------------------------------------------
-
-
-    # if(file.exists("preamble.tex")){
-    #   prmbl <- readLines("preamble.tex")
-    #   add_lines <- c("\\usepackage{color}", "\\usepackage{framed}", "\\setlength{\\fboxsep}{.8em}")
-    #   for(l in add_lines){
-    #     if(!any(grepl(l, prmbl, fixed = TRUE))){
-    #       prmbl <- c(prmbl, l)
-    #     }
-    #   }
-    #   if(!any(grepl("\\newenvironment{quizzbox}{", prmbl, fixed = TRUE))){
-    #     prmbl <- c(prmbl,
-    #                "\\newenvironment{quizzbox}{",
-    #                "  \\definecolor{shadecolor}{rgb}{0, 0, 0}  % black",
-    #                "  \\color{white}",
-    #                "  \\begin{shaded}}"
-    #                , "{\\end{shaded}}")
-    #   }
-    # } else {
-    #   writeLines(c("\\usepackage{color}", "\\usepackage{framed}", "\\setlength{\\fboxsep}{.8em}",
-    #                "", "\\newenvironment{quizzbox}{", "  \\definecolor{shadecolor}{rgb}{0, 0, 0}  % black",
-    #                "  \\color{white}", "  \\begin{shaded}}", "{\\end{shaded}}"),
-    #              "preamble.tex")
-    # }
 
     # Put YAML back in place --------------------------------------------------
     format_yml <- yaml::as.yaml(yml)
@@ -73,3 +46,20 @@ add_latex_support <- function(filename){
     writeLines(lnz, filename)
   })
 }
+
+#' Add webexercises 'YAML' metadata
+#'
+#' Adds the necessary 'YAML' metadata to an existing 'Quarto' or 'Rmarkdown'
+#' file.
+#' @param filename The name of the file to edit.
+#' @return No return value, called for side effects.
+#' @export
+#' @rdname add_to_quarto_file
+add_to_quarto_file <- function(filename){
+  add_latex_support(filename = filename)
+  add_html_support(filename = filename)
+}
+
+#' @export
+#' @rdname add_to_quarto_file
+add_to_rmarkdown_file <- add_to_quarto_file

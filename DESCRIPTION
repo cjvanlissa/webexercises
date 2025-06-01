@@ -1,8 +1,8 @@
 Package: webexercises
-Version: 1.1.1
-Title: Create Interactive Web Exercises in 'R Markdown' (Formerly 'webex')
-Description: Functions for easily creating interactive web pages using
-    'R Markdown' that students can use in self-guided learning.
+Version: 2.0.1
+Title: Create Interactive Web Exercises in 'R Markdown' and 'Quarto'
+Description: Functions for easily creating interactive web exercises that
+    students can use in self-guided learning.
 Authors@R: c(
     person("Dale","Barr",
            email = "dalejbarr@protonmail.com",

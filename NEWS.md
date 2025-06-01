@@ -1,4 +1,4 @@
-# webexercises 1.1.1
+# webexercises 2.0.1
 
 * Add support for webexercises in package vignettes
 * Add support for PDF versions of webexercises
