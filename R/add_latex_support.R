@@ -22,6 +22,8 @@ rmd_webex_support <- function(){
   return(htmltools::HTML(paste0(css_code, "\n", js_code)))
 }
 
+#' Add support for latex to quarto file
+#' @keywords internal
 add_latex_support <- function(filename){
   with_cli_try("Adding latex support to {.value {filename}}.", {
   if(!file.exists(filename)) stop("File does not exist.")
@@ -72,6 +74,8 @@ add_latex_support <- function(filename){
   })
 }
 
+#' Add support for latex to html file
+#' @keywords internal
 add_html_support <- function(filename){
   with_cli_try("Adding html support to {.value {filename}}.", {
     if(!file.exists(filename)) stop("File does not exist.")

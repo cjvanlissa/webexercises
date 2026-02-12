@@ -1,3 +1,5 @@
+#' Wrapper for hide with a default label
+#' @keywords internal
 answer <- function(x){
   hide("Answer")
   cat(x)

@@ -1,3 +1,5 @@
+#' Print an awesomebox
+#' @keywords internal
 box_args <- function(
     vrulecolor = 'white',
     hrule = c('\\abLongLine', '\\abShortLine', ''),
