@@ -6,7 +6,7 @@
 \usage{
 fitb(
   answer,
-  width = calculated_width,
+  width = min(100, max(nchar(answer))),
   num = NULL,
   ignore_case = FALSE,
   tol = NULL,
@@ -19,7 +19,7 @@ fitb(
 than one correct answer).}
 
 \item{width}{Width of the input box in characters. Defaults to the
-length of the longest answer.}
+length of the longest answer, with a minimum of 100 characters.}
 
 \item{num}{Whether the input is numeric, in which case allow for
 leading zeroes to be omitted. Determined from the answer data

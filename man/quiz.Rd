@@ -56,9 +56,8 @@ text file that contains the questions, see examples.
 invisible(capture.output(
 quiz(
 "The answer to this question is true." = TRUE,
-"This multiple choice question has three answers." =
- c("Correct", "Incorrect", "Not sure"),
-"Provide an exact floating point answer of 0.81" = 0.81,
+"This multiple choice question has three answers." = c("Correct", "Incorrect", "Not sure"),
+"Provide an exact floating point answer of 0.81" = 0.81
 )
 ))
 # From a file:

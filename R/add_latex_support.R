@@ -23,7 +23,7 @@ rmd_webex_support <- function(){
 }
 
 add_latex_support <- function(filename){
-  worcs:::with_cli_try("Adding latex support to {.value {filename}}.", {
+  with_cli_try("Adding latex support to {.value {filename}}.", {
   if(!file.exists(filename)) stop("File does not exist.")
 
   lnz <- readLines(filename)
@@ -73,7 +73,7 @@ add_latex_support <- function(filename){
 }
 
 add_html_support <- function(filename){
-  worcs:::with_cli_try("Adding html support to {.value {filename}}.", {
+  with_cli_try("Adding html support to {.value {filename}}.", {
     if(!file.exists(filename)) stop("File does not exist.")
 
     lnz <- readLines(filename)

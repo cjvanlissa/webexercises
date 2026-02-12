@@ -20,19 +20,25 @@ Authors@R: c(
 URL: https://github.com/psyteachr/webexercises
 Depends: R (>= 3.1.2)
 Imports:
+    stats,
+    utils,
     jsonlite,
     knitr,
     yaml,
     utils,
     grDevices,
     rstudioapi,
+    htmltools,
+    cli,
+    usethis,
     rmarkdown (>= 2.2)
 License: CC BY-SA 4.0
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: 
     testthat,
     bookdown,
     quarto,
-    xfun
+    xfun,
+    pkgdown
 Encoding: UTF-8
 VignetteBuilder: knitr

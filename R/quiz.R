@@ -38,9 +38,8 @@
 #' invisible(capture.output(
 #' quiz(
 #' "The answer to this question is true." = TRUE,
-#' "This multiple choice question has three answers." =
-#'  c("Correct", "Incorrect", "Not sure"),
-#' "Provide an exact floating point answer of 0.81" = 0.81,
+#' "This multiple choice question has three answers." = c("Correct", "Incorrect", "Not sure"),
+#' "Provide an exact floating point answer of 0.81" = 0.81
 #' )
 #' ))
 #' # From a file:
@@ -80,8 +79,8 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
   }
 
   # In case of HTML output --------------------------------------------------
-
-  if (knitr::is_html_output()) {
+  output_format <- determine_output_format()
+  if (output_format == "html") {
     if (requireNamespace("webexercises", quietly = TRUE)) {
       # Now, prepare the HTML code
       txt <- tryCatch({
@@ -134,7 +133,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
 
   # In case of PDF output ---------------------------------------------------
 
-  if (knitr::is_latex_output()) {
+  if (output_format == "latex") {
     txt <- tryCatch({
 
       questions <- unlist(lapply(seq_along(dots), function(i) {

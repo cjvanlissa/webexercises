@@ -9,6 +9,9 @@
 #' @importFrom yaml read_yaml write_yaml
 #' @export
 add_to_pkgdown <- function(pkgdown_dir = "."){
+  if(!requireNamespace("pkgdown", quietly = TRUE)){
+    return(NULL)
+  }
   usethis::with_project(pkgdown_dir, {
     css <- system.file("reports/default/webex.css", package = "webexercises")
     css_lines <- readLines(css)
@@ -83,7 +86,7 @@ add_to_pkgdown <- function(pkgdown_dir = "."){
 use_webex_vignette <- function(name, title = NULL, type = c("vignette", "article")){
   type <- type[1]
   if(!type %in% c("vignette", "article")){
-    worcs:::cli_msg("i" = 'Argument {.code type} must be one of {.code c("vignette", "article")}, not {.val {type}}.')
+    cli_msg("i" = 'Argument {.code type} must be one of {.code c("vignette", "article")}, not {.val {type}}.')
     return(invisible())
   }
   f <- list.files(path = "vignettes/", pattern = "(rmd|qmd)", ignore.case = TRUE, full.names = TRUE)
