@@ -1,12 +1,12 @@
 # Use to test quarto availability or version lower than
 skip_if_no_quarto <- function(ver = NULL) {
-  skip_if(is.null(quarto_path()), message = "Quarto is not available")
+  skip_if(is.null(quarto::quarto_path()), message = "Quarto is not available")
   skip_if_not(
-    quarto_available(min = ver, error = FALSE),
+    quarto::quarto_available(min = ver, error = FALSE),
     message = sprintf(
       "Version of quarto is lower than %s: %s.",
       ver,
-      quarto_version()
+      quarto::quarto_version()
     )
   )
 }
@@ -18,16 +18,16 @@ skip_if_quarto <- function(ver = NULL) {
   # Then skip if available or if version is greater than
   if (is.null(ver)) {
     skip_if(
-      !is.null(quarto_path()),
+      !is.null(quarto::quarto_path()),
       message = sprintf("Quarto is available: %s.", quarto_version())
     )
   } else {
     skip_if(
-      quarto_version() >= ver,
+      quarto::quarto_version() >= ver,
       message = sprintf(
         "Version of quarto is greater than or equal %s: %s.",
         ver,
-        quarto_version()
+        quarto::quarto_version()
       )
     )
   }
