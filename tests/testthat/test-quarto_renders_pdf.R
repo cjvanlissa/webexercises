@@ -3,6 +3,9 @@ test_that("quarto renders pdf", {
   if(!requireNamespace("quarto", quietly = TRUE)){
     testthat::skip()
   }
+  if(quarto::quarto_available()){
+    testthat::skip()
+  }
   scoped_tempdir({
     the_path <- "."
     create_quarto_doc("untitled", open = FALSE)
