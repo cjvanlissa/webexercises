@@ -1,11 +1,7 @@
 test_that("quarto renders pdf", {
   skip_if_not_pandoc("2.0")
-  if(!requireNamespace("quarto", quietly = TRUE)){
-    testthat::skip()
-  }
-  if(quarto::quarto_available()){
-    testthat::skip()
-  }
+  skip_if_no_quarto()
+
   scoped_tempdir({
     the_path <- "."
     create_quarto_doc("untitled", open = FALSE)
