@@ -57,7 +57,6 @@
 #' @importFrom knitr is_html_output is_latex_output
 quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
   # Parse input -------------------------------------------------------------
-
   if (isTRUE(knitr::is_html_output() & !requireNamespace("webexercises", quietly = TRUE))) {
     return("")
   }
@@ -65,16 +64,18 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
   dots <- list(...)
   # Check if a file is provided instead of multiple questions
   if (length(dots) == 1) {
-    if (file.exists(dots[[1]])) {
-      txt <- readLines(dots[[1]])
-      questionz <- lapply(txt, function(q) {
-        spl <- regexpr("=", q)
-        trimws(substring(q, c(1, spl + 1), c(spl - 1, nchar(q))))
-      })
-      dots <- lapply(questionz, function(q) {
-        eval(parse(text = q[2]))
-      })
-      names(dots) <- trimws(sapply(questionz, `[`, 1))
+    if(length(dots[[1]]) == 1 & inherits(dots[[1]], what = "character")){
+      if (file.exists(dots[[1]])) {
+        txt <- readLines(dots[[1]])
+        questionz <- lapply(txt, function(q) {
+          spl <- regexpr("=", q)
+          trimws(substring(q, c(1, spl + 1), c(spl - 1, nchar(q))))
+        })
+        dots <- lapply(questionz, function(q) {
+          eval(parse(text = q[2]))
+        })
+        names(dots) <- trimws(sapply(questionz, `[`, 1))
+      }
     }
   }
 
