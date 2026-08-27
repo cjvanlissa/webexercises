@@ -127,7 +127,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
 
         paste0(intro, paste(paste(names(dots), questions), collapse = "\n\n"), outro)
       }, error = function(e){ "" })
-      return(cat(txt, sep = "\n"))
+      return(knitr::raw_html(txt))
     }
   }
 
