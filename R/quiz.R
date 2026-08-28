@@ -80,7 +80,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
   }
 
   # In case of HTML output --------------------------------------------------
-  output_format <- determine_output_format()
+  output_format <- webexercises:::determine_output_format()
   if (output_format == "html") {
     if (requireNamespace("webexercises", quietly = TRUE)) {
       # Now, prepare the HTML code
@@ -125,9 +125,9 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
           )
         })
 
-        paste0(intro, paste(paste(names(dots), questions), collapse = "\n\n"), outro)
+        paste0(intro, paste(paste(names(dots), questions), collapse = "<br>"), outro)
       }, error = function(e){ "" })
-      return(knitr::raw_html(paste0(txt, collapse = "\n")))
+      return(knitr::raw_html(paste0(txt, collapse = "<br>")))
     }
   }
 
@@ -173,15 +173,15 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
                  "\\end{itemize}")
       if(show_box){
         txt <- c(paste0("\\begin{tcolorbox}[breakable, enhanced jigsaw,colback=blue!5!white,colframe=blue!75!black,rounded corners, parbox=false,title=", title, "]"),
-        "",
-        questions,
-        "",
-        "\\tcblower",
-        "\\textbf{Answers}",
-        "",
-        ansrs,
-        "",
-        "\\end{tcolorbox}")
+                 "",
+                 questions,
+                 "",
+                 "\\tcblower",
+                 "\\textbf{Answers}",
+                 "",
+                 ansrs,
+                 "",
+                 "\\end{tcolorbox}")
 
       } else {
         txt <- c(paste0("\\textbf{", title, "}"),
