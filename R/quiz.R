@@ -148,7 +148,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
                        c("\\begin{enumerate}",
                          "\\def\\labelenumi{\\Alph{enumi}.}",
                          "\\tightlist",
-                         as.character(t(expand.grid("\\item", paste0("  ", sample(q)), stringsAsFactors = FALSE)))
+                         as.character(t(expand.grid("\\item", paste0("  ", sample(escape_regex(q))), stringsAsFactors = FALSE)))
                          , "\\end{enumerate}")
                      } else {
                        stop()
