@@ -78,7 +78,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       }
     }
   }
-browser()
+
   # In case of HTML output --------------------------------------------------
   output_format <- webexercises:::determine_output_format()
   if (output_format == "html") {
