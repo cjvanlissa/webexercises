@@ -449,7 +449,7 @@ strip_lzero <- function(x) {
 #' @examples
 #' escape_regex("library(tidyverse)")
 escape_regex <- function(string) {
-  gsub("([.|()\\^{}+$*?]|\\[|\\])", "\\\\\\1", string)
+  gsub("([.|()\\^{}+$*?_]|\\[|\\])", "\\\\\\1", string)
 }
 
 #' Determine the output format
