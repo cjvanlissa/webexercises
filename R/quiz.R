@@ -78,7 +78,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       }
     }
   }
-
+browser()
   # In case of HTML output --------------------------------------------------
   output_format <- webexercises:::determine_output_format()
   if (output_format == "html") {
@@ -140,7 +140,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       questions <- unlist(lapply(seq_along(dots), function(i) {
         n <- names(dots)[i]
         q <- dots[[n]]
-        c(paste0("\\textbf{ Q", i, ": ", escape_regex(n), "}", collapse = ""), "",
+        c(paste0("\\textbf{ Q", i, ": ", escape_latex(n), "}", collapse = ""), "",
           tryCatch({
             switch(class(q)[1],
                    "character" = {
@@ -148,7 +148,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
                        c("\\begin{enumerate}",
                          "\\def\\labelenumi{\\Alph{enumi}.}",
                          "\\tightlist",
-                         as.character(t(expand.grid("\\item", paste0("  ", sample(escape_regex(q))), stringsAsFactors = FALSE)))
+                         as.character(t(expand.grid("\\item", paste0("  ", sample(escape_latex(q))), stringsAsFactors = FALSE)))
                          , "\\end{enumerate}")
                      } else {
                        stop()
@@ -166,7 +166,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       ansrs <- unname(as.character(dots))
       is_mc <- !is.na(sapply(dots, `[`, "answer"))
       if(any(is_mc)){
-        ansrs[which(is_mc)] <- escape_regex(sapply(dots[which(is_mc)], `[`, "answer"))
+        ansrs[which(is_mc)] <- escape_latex(sapply(dots[which(is_mc)], `[`, "answer"))
       }
       ansrs <- c("\\begin{itemize}", "\\tightlist",
                  paste0("\\item[Q", seq_along(ansrs), ":]  ", ansrs),
@@ -197,4 +197,9 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
   }
 
   ""
+}
+
+
+escape_latex <- function(x) {
+  gsub("([#$%&_{}])", "\\\\\\1", x, perl = TRUE)
 }
