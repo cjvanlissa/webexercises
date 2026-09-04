@@ -140,7 +140,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       questions <- unlist(lapply(seq_along(dots), function(i) {
         n <- names(dots)[i]
         q <- dots[[n]]
-        c(paste0("\\textbf{ Q", i, ": ", n, "}", collapse = ""), "",
+        c(paste0("\\textbf{ Q", i, ": ", escape_regex(n), "}", collapse = ""), "",
           tryCatch({
             switch(class(q)[1],
                    "character" = {
