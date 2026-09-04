@@ -166,7 +166,7 @@ quiz <- function(..., title = "Quiz", show_box = TRUE, show_check = TRUE){
       ansrs <- unname(as.character(dots))
       is_mc <- !is.na(sapply(dots, `[`, "answer"))
       if(any(is_mc)){
-        ansrs[which(is_mc)] <- sapply(dots[which(is_mc)], `[`, "answer")
+        ansrs[which(is_mc)] <- escape_regex(sapply(dots[which(is_mc)], `[`, "answer"))
       }
       ansrs <- c("\\begin{itemize}", "\\tightlist",
                  paste0("\\item[Q", seq_along(ansrs), ":]  ", ansrs),
